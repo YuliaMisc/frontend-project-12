@@ -13,6 +13,7 @@ import ErrorPage from './ErrorPage.jsx';
 import SignupPage from './SignupPage.jsx';
 import ChatPage from './ChatPade.jsx';
 import RequestAuth from '../hooks/RequestAuth.jsx';
+import Layout from './Layout.jsx';
 
 const AuthProvider = ({ children }) => {
   const [loggedIn, setLoggedIn] = useState(false);
@@ -44,12 +45,19 @@ const AuthProvider = ({ children }) => {
 
 const App = () => (
   <AuthProvider>
-    <Routes>
-      <Route index element={(<RequestAuth><ChatPage /></RequestAuth>)} />
-      <Route path="/signup" element={<SignupPage />} />
-      <Route path="/login" element={<LoginPage />} />
-      <Route path="*" element={<ErrorPage />} />
-    </Routes>
+    <div className="h-100">
+      <div className="h-100" id="chat">
+        <div className="d-flex flex-column h-100">
+          <Layout />
+          <Routes>
+            <Route index element={(<RequestAuth><ChatPage /></RequestAuth>)} />
+            <Route path="/signup" element={<SignupPage />} />
+            <Route path="/login" element={<LoginPage />} />
+            <Route path="*" element={<ErrorPage />} />
+          </Routes>
+        </div>
+      </div>
+    </div>
   </AuthProvider>
 );
 
