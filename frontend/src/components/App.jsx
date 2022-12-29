@@ -1,10 +1,11 @@
 import React, { useState } from 'react';
 import '../index.css';
 import {
-  BrowserRouter,
   Routes,
   Route,
+  useNavigate,
 } from 'react-router-dom';
+import axios from 'axios';
 
 import AuthContext from '../hooks/AuthContextProvider.jsx';
 import LoginPage from './LoginPage.jsx';
@@ -15,8 +16,15 @@ import RequestAuth from '../hooks/RequestAuth.jsx';
 
 const AuthProvider = ({ children }) => {
   const [loggedIn, setLoggedIn] = useState(false);
+  const navigate = useNavigate();
 
-  const logIn = () => setLoggedIn(true);
+  const logIn = async (values) => {
+    const { data } = await axios.post('/api/v1/login', values);
+    localStorage.setItem('token', data.token);
+    localStorage.setItem('username', data.username);
+    navigate('/', { replace: true });
+    setLoggedIn(true);
+  };
 
   const logOut = () => {
     localStorage.removeItem('token');
@@ -36,14 +44,12 @@ const AuthProvider = ({ children }) => {
 
 const App = () => (
   <AuthProvider>
-    <BrowserRouter>
-      <Routes>
-        <Route index element={(<RequestAuth><ChatPage /></RequestAuth>)} />
-        <Route path="/signup" element={<SignupPage />} />
-        <Route path="/login" element={<LoginPage />} />
-        <Route path="*" element={<ErrorPage />} />
-      </Routes>
-    </BrowserRouter>
+    <Routes>
+      <Route index element={(<RequestAuth><ChatPage /></RequestAuth>)} />
+      <Route path="/signup" element={<SignupPage />} />
+      <Route path="/login" element={<LoginPage />} />
+      <Route path="*" element={<ErrorPage />} />
+    </Routes>
   </AuthProvider>
 );
 

@@ -2,9 +2,7 @@ import React, { useState } from 'react';
 import * as yup from 'yup';
 import { useFormik } from 'formik';
 import { useTranslation } from 'react-i18next';
-import { useNavigate } from 'react-router-dom';
 import { Button, Form } from 'react-bootstrap';
-import axios from 'axios';
 
 import login from '../images/login.jpg';
 import { useAuth } from '../hooks/index.jsx';
@@ -12,8 +10,7 @@ import { useAuth } from '../hooks/index.jsx';
 const LoginPage = () => {
   const { t } = useTranslation();
   const [authFailed, setAuthFailed] = useState(false);
-  const navigate = useNavigate();
-  const auth = useAuth();
+  const { logIn } = useAuth();
 
   const formik = useFormik({
     initialValues: {
@@ -27,14 +24,9 @@ const LoginPage = () => {
     onSubmit: async (values) => {
       setAuthFailed(false);
       try {
-        const { data } = await axios.post('/api/v1/login', values);
-        localStorage.setItem('token', data.token);
-        localStorage.setItem('username', data.username);
-        auth.logIn();
-        navigate('/', { replace: true });
+        await logIn(values);
       } catch (err) {
         setAuthFailed(true);
-        navigate('/login', { replace: true });
       }
     },
   });
