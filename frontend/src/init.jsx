@@ -12,6 +12,7 @@ const init = async () => {
     .use(initReactI18next)
     .init({
       resources,
+      lng: 'ru',
       fallbackLng: 'ru',
     });
 

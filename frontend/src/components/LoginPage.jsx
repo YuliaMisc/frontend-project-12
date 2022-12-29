@@ -1,9 +1,20 @@
-import React from 'react';
+import React, { useState } from 'react';
 import * as yup from 'yup';
 import { useFormik } from 'formik';
-import login from '../images/login.jpg';
+import { useTranslation } from 'react-i18next';
+import { useNavigate } from 'react-router-dom';
+import { Button, Form } from 'react-bootstrap';
+import axios from 'axios';
 
-const LoginForm = () => {
+import login from '../images/login.jpg';
+import { useAuth } from '../hooks/index.jsx';
+
+const LoginPage = () => {
+  const { t } = useTranslation();
+  const [authFailed, setAuthFailed] = useState(false);
+  const navigate = useNavigate();
+  const auth = useAuth();
+
   const formik = useFormik({
     initialValues: {
       username: '',
@@ -11,14 +22,19 @@ const LoginForm = () => {
     },
     validationSchema: yup.object({
       username: yup.string().trim().required(),
-      password: yup.string().required().min(6),
+      password: yup.string().required(),
     }),
-    onSubmit: async () => {
+    onSubmit: async (values) => {
+      setAuthFailed(false);
       try {
-        const { username } = formik.values;
-        await console.log(username);
+        const { data } = await axios.post('/api/v1/login', values);
+        localStorage.setItem('token', data.token);
+        localStorage.setItem('username', data.username);
+        auth.logIn();
+        navigate('/', { replace: true });
       } catch (err) {
-        console.log(err);
+        setAuthFailed(true);
+        navigate('/login', { replace: true });
       }
     },
   });
@@ -30,7 +46,6 @@ const LoginForm = () => {
           <nav className="shadow-sm navbar navbar-expand-lg navbar-light bg-white">
             <div className="container">
               <a className="navbar-brand" href="/">Hexlet Chat</a>
-              <button type="button" className="btn btn-primary">Выйти</button>
             </div>
           </nav>
           <div className="container-fluid h-100">
@@ -41,10 +56,10 @@ const LoginForm = () => {
                     <div className="col-12 col-md-6 d-flex align-items-center justify-content-center">
                       <img src={login} className="rounded-circle" alt="Войти" />
                     </div>
-                    <form className="col-12 col-md-6 mt-3 mt-mb-0" onSubmit={formik.handleSubmit}>
-                      <h1 className="text-center mb-4">Войти</h1>
-                      <div className="form-floating mb-3">
-                        <input
+                    <Form className="col-12 col-md-6 mt-3 mt-mb-0" onSubmit={formik.handleSubmit}>
+                      <h1 className="text-center mb-4">{t('login.header')}</h1>
+                      <Form.Group className="form-floating mb-3">
+                        <Form.Control
                           name="username"
                           autoComplete="username"
                           required=""
@@ -53,11 +68,12 @@ const LoginForm = () => {
                           className="form-control"
                           onChange={formik.handleChange}
                           value={formik.values.username}
+                          isInvalid={authFailed}
                         />
-                        <label className="form-label" htmlFor="username">Ваш ник</label>
-                      </div>
-                      <div className="form-floating mb-4">
-                        <input
+                        <Form.Label className="form-label" htmlFor="username">{t('login.username')}</Form.Label>
+                      </Form.Group>
+                      <Form.Group className="form-floating mb-4">
+                        <Form.Control
                           name="password"
                           autoComplete="current-password"
                           required=""
@@ -67,16 +83,18 @@ const LoginForm = () => {
                           className="form-control"
                           onChange={formik.handleChange}
                           value={formik.values.password}
+                          isInvalid={authFailed}
                         />
-                        <label className="form-label" htmlFor="password">Пароль</label>
-                      </div>
-                      <button type="submit" className="w-100 mb-3 btn btn-outline-primary">Войти</button>
-                    </form>
+                        <Form.Label className="form-label" htmlFor="password">{t('login.password')}</Form.Label>
+                        <Form.Control.Feedback type="invalid">{t('login.authFailed')}</Form.Control.Feedback>
+                      </Form.Group>
+                      <Button type="submit" className="w-100 mb-3 btn btn-outline-primary">{t('login.submit')}</Button>
+                    </Form>
                   </div>
                   <div className="card-footer p-4">
                     <div className="text-center">
-                      <span>Нет аккаунта?</span>
-                      <a href="/signup">Регистрация</a>
+                      <span>{t('login.newToChat')}</span>
+                      <a href="/signup">{t('login.signup')}</a>
                     </div>
                   </div>
                 </div>
@@ -90,4 +108,4 @@ const LoginForm = () => {
   );
 };
 
-export default LoginForm;
+export default LoginPage;
