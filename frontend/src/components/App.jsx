@@ -33,9 +33,11 @@ const AuthProvider = ({ children }) => {
     setLoggedIn(false);
   };
 
+  const getAuthHeader = () => ({ Authorization: `Bearer ${localStorage.getItem('token')}` });
+
   return (
     <AuthContext.Provider value={{ // eslint-disable-line
-      loggedIn, logIn, logOut,
+      loggedIn, logIn, logOut, getAuthHeader,
     }}
     >
       {children}

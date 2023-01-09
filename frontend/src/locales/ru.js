@@ -14,6 +14,13 @@ export default {
         network: 'Ошибка сети',
         unknown: 'Неизвестная ошибка',
       },
+      chat: {
+        logOff: 'Выйти',
+      },
+      channel: {
+        channels: 'Каналы',
+        send: 'Отправить',
+      },
     },
   },
 };
