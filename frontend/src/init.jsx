@@ -24,7 +24,6 @@ const init = async () => {
   };
 
   socket.on('newMessage', (payload) => {
-    console.log(store.dispatch);
     store.dispatch(messagesActions.addNewMessage(payload));
   });
 

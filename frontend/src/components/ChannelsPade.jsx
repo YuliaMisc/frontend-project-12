@@ -2,7 +2,6 @@ import React, { useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { useSelector } from 'react-redux';
 import cn from 'classnames';
-
 import { useApi, useAuth } from '../hooks/index.jsx';
 
 const Messages = ({ author, text }) => (

@@ -16,7 +16,6 @@ import RequestAuth from '../hooks/RequestAuth.jsx';
 import Layout from './Layout.jsx';
 
 const AuthProvider = ({ children }) => {
-  const [loggedIn, setLoggedIn] = useState(false);
   const navigate = useNavigate();
   const currentUser = localStorage.getItem('username');
   const [username, setUserName] = useState(currentUser || '');
@@ -26,15 +25,14 @@ const AuthProvider = ({ children }) => {
     localStorage.setItem('token', data.token);
     localStorage.setItem('username', data.username);
     navigate('/', { replace: true });
-    setLoggedIn(true);
     setUserName(localStorage.getItem('username'));
   };
 
   const logOut = () => {
     localStorage.removeItem('token');
     localStorage.removeItem('username');
-    setLoggedIn(false);
     setUserName(localStorage.getItem('username'));
+    navigate('/login', { replace: true });
   };
 
   const getAuthHeader = () => ({ Authorization: `Bearer ${localStorage.getItem('token')}` });
@@ -43,7 +41,7 @@ const AuthProvider = ({ children }) => {
 
   return (
     <AuthContext.Provider value={{ // eslint-disable-line
-      loggedIn, logIn, logOut, getAuthHeader, getUserName,
+      logIn, logOut, getAuthHeader, getUserName,
     }}
     >
       {children}
@@ -59,8 +57,8 @@ const App = () => (
           <Layout />
           <Routes>
             <Route index element={(<RequestAuth><ChatPage /></RequestAuth>)} />
-            <Route path="/signup" element={<SignupPage />} />
-            <Route path="/login" element={<LoginPage />} />
+            <Route path="signup" element={<SignupPage />} />
+            <Route path="login" element={<LoginPage />} />
             <Route path="*" element={<ErrorPage />} />
           </Routes>
         </div>
