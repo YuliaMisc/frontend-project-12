@@ -18,6 +18,8 @@ import Layout from './Layout.jsx';
 const AuthProvider = ({ children }) => {
   const [loggedIn, setLoggedIn] = useState(false);
   const navigate = useNavigate();
+  const currentUser = localStorage.getItem('username');
+  const [username, setUserName] = useState(currentUser || '');
 
   const logIn = async (values) => {
     const { data } = await axios.post('/api/v1/login', values);
@@ -25,19 +27,23 @@ const AuthProvider = ({ children }) => {
     localStorage.setItem('username', data.username);
     navigate('/', { replace: true });
     setLoggedIn(true);
+    setUserName(localStorage.getItem('username'));
   };
 
   const logOut = () => {
     localStorage.removeItem('token');
     localStorage.removeItem('username');
     setLoggedIn(false);
+    setUserName(localStorage.getItem('username'));
   };
 
   const getAuthHeader = () => ({ Authorization: `Bearer ${localStorage.getItem('token')}` });
 
+  const getUserName = () => username;
+
   return (
     <AuthContext.Provider value={{ // eslint-disable-line
-      loggedIn, logIn, logOut, getAuthHeader,
+      loggedIn, logIn, logOut, getAuthHeader, getUserName,
     }}
     >
       {children}
