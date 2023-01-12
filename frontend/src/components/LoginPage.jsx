@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useRef, useEffect } from 'react';
 import * as yup from 'yup';
 import { useFormik } from 'formik';
 import { useTranslation } from 'react-i18next';
@@ -31,6 +31,9 @@ const LoginPage = () => {
     },
   });
 
+  const input = useRef(null);
+  useEffect(() => input.current.focus(), []);
+
   return (
     <div className="container-fluid h-100">
       <div className="row justify-content-center align-content-center h-100">
@@ -53,6 +56,7 @@ const LoginPage = () => {
                     onChange={formik.handleChange}
                     value={formik.values.username}
                     isInvalid={authFailed}
+                    ref={input}
                   />
                   <Form.Label className="form-label" htmlFor="username">{t('login.username')}</Form.Label>
                 </Form.Group>

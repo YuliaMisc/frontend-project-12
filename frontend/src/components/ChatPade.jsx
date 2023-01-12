@@ -4,7 +4,9 @@ import { useDispatch } from 'react-redux';
 
 import { actions as channelsActions } from '../slices/channelsSlice.js';
 import { useAuth } from '../hooks/index.jsx';
-import ChannelsPade from './ChannelsPade.jsx';
+import ChannelsContainer from './ChannelsContainer.jsx';
+import ChatContainer from './ChatContainer.jsx';
+import Modal from './Modal.jsx';
 
 const ChatPage = () => {
   const { getAuthHeader } = useAuth();
@@ -24,7 +26,11 @@ const ChatPage = () => {
 
   return (
     <div className="container h-100 my-4 overflow-hidden rounded shadow">
-      <ChannelsPade />
+      <div className="row h-100 bg-white flex-md-row">
+        <ChannelsContainer />
+        <ChatContainer />
+        <Modal />
+      </div>
     </div>
   );
 };
