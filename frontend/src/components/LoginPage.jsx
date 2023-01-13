@@ -10,6 +10,7 @@ import { useAuth } from '../hooks/index.jsx';
 const LoginPage = () => {
   const { t } = useTranslation();
   const [authFailed, setAuthFailed] = useState(false);
+  const [loadingStatus, setLoadingStatus] = useState(false);
   const { logIn } = useAuth();
 
   const formik = useFormik({
@@ -23,10 +24,12 @@ const LoginPage = () => {
     }),
     onSubmit: async (values) => {
       setAuthFailed(false);
+      setLoadingStatus(true);
       try {
         await logIn(values);
       } catch (err) {
         setAuthFailed(true);
+        setLoadingStatus(false);
       }
     },
   });
@@ -50,10 +53,11 @@ const LoginPage = () => {
                     name="username"
                     autoComplete="username"
                     required=""
-                    placeholder="Ваш ник"
+                    placeholder={t('login.username')}
                     id="username"
                     className="form-control"
                     onChange={formik.handleChange}
+                    onBlur={formik.handleBlur}
                     value={formik.values.username}
                     isInvalid={authFailed}
                     ref={input}
@@ -65,18 +69,19 @@ const LoginPage = () => {
                     name="password"
                     autoComplete="current-password"
                     required=""
-                    placeholder="Пароль"
+                    placeholder={t('login.password')}
                     type="password"
                     id="password"
                     className="form-control"
                     onChange={formik.handleChange}
+                    onBlur={formik.handleBlur}
                     value={formik.values.password}
                     isInvalid={authFailed}
                   />
                   <Form.Label className="form-label" htmlFor="password">{t('login.password')}</Form.Label>
                   <Form.Control.Feedback type="invalid">{t('login.authFailed')}</Form.Control.Feedback>
                 </Form.Group>
-                <Button type="submit" className="w-100 mb-3 btn btn-outline-primary">{t('login.submit')}</Button>
+                <Button type="submit" disabled={loadingStatus} className="w-100 mb-3 btn btn-outline-primary">{t('login.submit')}</Button>
               </Form>
             </div>
             <div className="card-footer p-4">
