@@ -3,6 +3,7 @@ import React, { useEffect } from 'react';
 import { useDispatch } from 'react-redux';
 
 import { actions as channelsActions } from '../slices/channelsSlice.js';
+import { actions as messagesActions } from '../slices/messagesSlice.js';
 import { useAuth } from '../hooks/index.jsx';
 import ChannelsContainer from './ChannelsContainer.jsx';
 import ChatContainer from './ChatContainer.jsx';
@@ -17,6 +18,7 @@ const ChatPage = () => {
       const getData = async () => {
         const { data } = await axios.get('/api/v1/data', { headers: getAuthHeader() });
         dispatch(channelsActions.setInitialСhannels(data));
+        dispatch(messagesActions.setInitialMessages(data));
       };
       getData();
     } catch (err) {

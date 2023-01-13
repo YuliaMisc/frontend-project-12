@@ -24,8 +24,7 @@ const init = async () => {
   });
 
   const addMessage = async (text, username, channelId) => {
-    const response = await emittingEvents('newMessage', { text, username, channelId });
-    return response;
+    await emittingEvents('newMessage', { text, username, channelId });
   };
   const addCannel = async (name) => {
     const response = await emittingEvents('newChannel', { name });

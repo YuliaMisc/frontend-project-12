@@ -16,6 +16,13 @@ export default {
       },
       chat: {
         logOff: 'Выйти',
+        send: 'Отправить',
+        messageCount_zero: 'сообщений',
+        messageCount_one: 'сообщение',
+        messageCount_few: 'сообщения',
+        messageCount_many: 'сообщений',
+        newMessage: 'Новое сообщение',
+        enterMessage: 'Введите сообщение...',
       },
       channel: {
         header: 'Каналы',
