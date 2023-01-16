@@ -52,12 +52,12 @@ const init = async () => {
   });
 
   const rollbarConfig = {
-    accessToken: '16736662cedf4895955f86884c873b15',
+    accessToken: 'e830b591be1b4f71ba401a7706fd7341',
     captureUncaught: true,
     captureUnhandledRejections: true,
     payload: {
-      environment: "production",
-    }
+      environment: 'production',
+    },
   };
 
   const i18n = i18next.createInstance();
