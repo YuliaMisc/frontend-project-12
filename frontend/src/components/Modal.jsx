@@ -195,10 +195,10 @@ const listModal = {
   renameCannel: RenameCannel,
 };
 
-const ModalEl = () => {
+const ModalContainer = () => {
   const { modalType } = useSelector((state) => state.modalReducer);
   const ActiveModal = listModal[modalType];
   return modalType ? <ActiveModal /> : '';
 };
 
-export default ModalEl;
+export default ModalContainer;

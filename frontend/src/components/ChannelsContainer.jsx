@@ -2,15 +2,18 @@ import React from 'react';
 import { useTranslation } from 'react-i18next';
 import { useSelector, useDispatch } from 'react-redux';
 import cn from 'classnames';
+import filter from 'leo-profanity';
 import { actions as channelsActions } from '../slices/channelsSlice.js';
 import { actions as modalActions } from '../slices/modalSlice.js';
 
 const Channels = ({
   value, id, isCurrent, removable,
 }) => {
+  filter.add(filter.getDictionary('ru'));
   const dispatch = useDispatch();
   const { t } = useTranslation();
   const classButtons = cn('w-100', 'rounded-0', 'text-start', 'text-truncate', 'btn', { 'btn-secondary': isCurrent });
+  const nameChanel = filter.clean(value);
 
   const handleClick = (channelId) => () => {
     dispatch(channelsActions.switchChannel(channelId));
@@ -29,7 +32,7 @@ const Channels = ({
       <div role="group" className="d-flex dropdown btn-group">
         <button type="button" className={classButtons} onClick={handleClick(id)}>
           <span className="me-1">#</span>
-          {value}
+          {nameChanel}
         </button>
         {removable && (
           <>

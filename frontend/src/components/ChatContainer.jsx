@@ -1,16 +1,20 @@
 import React, { useState, useRef, useEffect } from 'react';
 import { useSelector } from 'react-redux';
 import { useTranslation } from 'react-i18next';
+import filter from 'leo-profanity';
 
 import { useApi, useAuth } from '../hooks/index.jsx';
 
-const Messages = ({ author, text }) => (
-  <div className="text-break mb-2">
-    <b>{author}</b>
-    :
-    {text}
-  </div>
-);
+const Messages = ({ author, text }) => {
+  filter.add(filter.getDictionary('ru'));
+  const message = filter.clean(text);
+  return (
+    <div className="text-break mb-2">
+      <b>{author}</b>
+      {`: ${message}`}
+    </div>
+  );
+};
 
 const ChatContainer = () => {
   const { t } = useTranslation();
@@ -23,10 +27,7 @@ const ChatContainer = () => {
   const { messages } = useSelector((store) => store.messagesReducer);
   const { currentChannelId, channels } = useSelector((state) => state.channelsReducer);
   const currentChanel = channels.find(({ id }) => currentChannelId === id);
-
   const filretMaeesnge = messages.filter(({ channelId }) => channelId === currentChannelId);
-  const nameChannel = currentChanel ? `# ${currentChanel.name}` : '# general';
-  const countMessange = `${filretMaeesnge.length} ${t('chat.messageCount', { count: filretMaeesnge.length })}`;
 
   const input = useRef(null);
   useEffect(() => input.current.focus(), []);
@@ -48,9 +49,9 @@ const ChatContainer = () => {
       <div className="d-flex flex-column h-100">
         <div className="bg-light mb-4 p-3 shadow-sm small">
           <p className="m-0">
-            <b>{nameChannel}</b>
+            <b>{currentChanel ? `# ${currentChanel.name}` : '# general'}</b>
           </p>
-          <span className="text-muted">{countMessange}</span>
+          <span className="text-muted">{`${filretMaeesnge.length} ${t('chat.messageCount', { count: filretMaeesnge.length })}`}</span>
         </div>
         <div id="messages-box" className="chat-messages overflow-auto px-5" />
         {filretMaeesnge.map(({

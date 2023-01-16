@@ -9,7 +9,7 @@ import { actions as messagesActions } from '../slices/messagesSlice.js';
 import { useAuth } from '../hooks/index.jsx';
 import ChannelsContainer from './ChannelsContainer.jsx';
 import ChatContainer from './ChatContainer.jsx';
-import ModalEl from './Modal.jsx';
+import ModalContainer from './Modal.jsx';
 
 const ChatPage = () => {
   const { getAuthHeader } = useAuth();
@@ -39,7 +39,7 @@ const ChatPage = () => {
       <div className="row h-100 bg-white flex-md-row">
         <ChannelsContainer />
         <ChatContainer />
-        <ModalEl />
+        <ModalContainer />
       </div>
     </div>
   );
