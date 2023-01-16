@@ -8,6 +8,7 @@ import 'bootstrap/js/dist/modal';
 import { BrowserRouter } from 'react-router-dom';
 import { Provider } from 'react-redux';
 import { io } from 'socket.io-client';
+import { Provider as RollbarProvide, ErrorBoundary } from '@rollbar/react';
 
 import App from './components/App';
 import resources from './locales/index.js';
@@ -50,6 +51,15 @@ const init = async () => {
     store.dispatch(channelsActions.renameChannel(payload));
   });
 
+  const rollbarConfig = {
+    accessToken: '16736662cedf4895955f86884c873b15',
+    captureUncaught: true,
+    captureUnhandledRejections: true,
+    payload: {
+      environment: "production",
+    }
+  };
+
   const i18n = i18next.createInstance();
 
   await i18n
@@ -68,15 +78,19 @@ const init = async () => {
   };
 
   return (
-    <Provider store={store}>
-      <ApiContext.Provider value={api}>
-        <BrowserRouter>
-          <I18nextProvider i18n={i18n}>
-            <App />
-          </I18nextProvider>
-        </BrowserRouter>
-      </ApiContext.Provider>
-    </Provider>
+    <RollbarProvide config={rollbarConfig}>
+      <ErrorBoundary>
+        <Provider store={store}>
+          <ApiContext.Provider value={api}>
+            <BrowserRouter>
+              <I18nextProvider i18n={i18n}>
+                <App />
+              </I18nextProvider>
+            </BrowserRouter>
+          </ApiContext.Provider>
+        </Provider>
+      </ErrorBoundary>
+    </RollbarProvide>
   );
 };
 
