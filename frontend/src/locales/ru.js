@@ -11,8 +11,11 @@ export default {
         header: 'Войти',
       },
       errors: {
-        network: 'Ошибка сети',
+        network: 'Ошибка соединения',
         unknown: 'Неизвестная ошибка',
+        pageNotFound: 'Страница не найдена',
+        go: 'Но вы можете перейти',
+        homePage: 'на главную страницу',
       },
       chat: {
         logOff: 'Выйти',
