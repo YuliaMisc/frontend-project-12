@@ -24,19 +24,6 @@ const Channels = ({
     dispatch(modalActions.openModal({ modalType: 'renameCannel', channelId }));
   };
 
-  const ChannelControlButton = (
-    <>
-      <button type="button" aria-expanded="false" className="btn dropdown-toggle dropdown-toggle-split" data-bs-toggle="dropdown">
-        <span className="visually-hidden">{t('channel.channelMenu')}</span>
-      </button>
-      <div className="dropdown-menu">
-        <button type="button" className="dropdown-item" href="#" onClick={handleClickRemove(id)}>{t('channel.remove')}</button>
-        <button type="button" className="dropdown-item" href="#" onClick={handleClickRename(id)}>{t('channel.rename')}</button>
-      </div>
-    </>
-  );
-  const button = removable ? ChannelControlButton : '';
-
   return (
     <li className="nav-item w-100">
       <div role="group" className="d-flex dropdown btn-group">
@@ -44,7 +31,17 @@ const Channels = ({
           <span className="me-1">#</span>
           {value}
         </button>
-        {button}
+        {removable && (
+          <>
+            <button type="button" aria-expanded="false" className="btn dropdown-toggle dropdown-toggle-split" data-bs-toggle="dropdown">
+              <span className="visually-hidden">{t('channel.channelMenu')}</span>
+            </button>
+            <div className="dropdown-menu">
+              <button type="button" className="dropdown-item" href="#" onClick={handleClickRemove(id)}>{t('channel.remove')}</button>
+              <button type="button" className="dropdown-item" href="#" onClick={handleClickRename(id)}>{t('channel.rename')}</button>
+            </div>
+          </>
+        )}
       </div>
     </li>
   );

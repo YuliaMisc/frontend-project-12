@@ -1,17 +1,20 @@
 import axios from 'axios';
 import React, { useEffect } from 'react';
 import { useDispatch } from 'react-redux';
+import { useTranslation } from 'react-i18next';
+import { toast } from 'react-toastify';
 
 import { actions as channelsActions } from '../slices/channelsSlice.js';
 import { actions as messagesActions } from '../slices/messagesSlice.js';
 import { useAuth } from '../hooks/index.jsx';
 import ChannelsContainer from './ChannelsContainer.jsx';
 import ChatContainer from './ChatContainer.jsx';
-import Modal from './Modal.jsx';
+import ModalEl from './Modal.jsx';
 
 const ChatPage = () => {
   const { getAuthHeader } = useAuth();
   const dispatch = useDispatch();
+  const { t } = useTranslation();
 
   useEffect(() => {
     try {
@@ -22,7 +25,12 @@ const ChatPage = () => {
       };
       getData();
     } catch (err) {
-      console.log(err);
+      if (err.isAxiosError) { // eslint-disable-line
+        toast.error(t('errors.network'));
+        throw err;
+      } else {
+        toast.error(t('erros.unknown'));
+      }
     }
   });
 
@@ -31,7 +39,7 @@ const ChatPage = () => {
       <div className="row h-100 bg-white flex-md-row">
         <ChannelsContainer />
         <ChatContainer />
-        <Modal />
+        <ModalEl />
       </div>
     </div>
   );

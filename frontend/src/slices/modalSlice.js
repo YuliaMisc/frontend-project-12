@@ -13,9 +13,11 @@ const modalSlice = createSlice({
       const { modalType, channelId } = payload;
       state.modalType = modalType;
       state.channelId = channelId;
+      state.show = true;
     },
     closeModal(state) {
       state.modalType = null;
+      state.show = false;
     },
   },
 });

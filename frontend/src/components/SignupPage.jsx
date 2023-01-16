@@ -51,10 +51,10 @@ const SignupPage = () => {
         }
 
         if (err.isAxiosError) { // eslint-disable-line
-          toast(t('errors.network'));
+          toast.error(t('errors.network'));
           throw err;
         } else {
-          toast(t('erros.unknown'));
+          toast.error(t('erros.unknown'));
         }
       }
     },

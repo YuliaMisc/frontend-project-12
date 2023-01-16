@@ -6,6 +6,7 @@ import {
   useNavigate,
 } from 'react-router-dom';
 import axios from 'axios';
+import { ToastContainer } from 'react-toastify';
 
 import AuthContext from '../hooks/AuthContextProvider.jsx';
 import LoginPage from './LoginPage.jsx';
@@ -64,6 +65,7 @@ const App = () => (
         </div>
       </div>
     </div>
+    <ToastContainer />
   </AuthProvider>
 );
 
