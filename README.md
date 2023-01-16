@@ -1,33 +1,29 @@
 ### Hexlet tests and linter status:
 [![Actions Status](https://github.com/YuliaMisc/frontend-project-12/workflows/hexlet-check/badge.svg)](https://github.com/YuliaMisc/frontend-project-12/actions)
 
-<h1>Program description</h1>
+# Program description
 [The application](https://frontend-project-12-production-9d10.up.railway.app/login) is a simple analogue of Slack chat.
 
-<h2>Features:</h2>
-<ul>
-  <li>Registration and login.</li>
-  <li>Receiving and sending messages in real time</li>
-  <li>Creating, renaming and deleting channels</li>
-  <li>Profanity filter</li>
-</ul>
+## Features:
+  - Registration and login.
+  - Receiving and sending messages in real time
+  - Creating, renaming and deleting channels
+  - Profanity filter
 
-<h2>Stack:</h2>
-<ol>
-  <li>React</li>
-  <li>Redux</li>
-  <li>react-router-dom</li>
-  <li>i18next</li>
-  <li>socket.io-client</li>
-  <li>yup</li>
-  <li>Bootstrap</li>
-  <li>formik</li>
-  <li>axios</li>
-  <li>leo-profanity</li>
-</ol>
+## Stack:
+  1. React
+  2. Redux
+  3. react-router-dom
+  4. i18next
+  5. socket.io-client
+  6. yup
+  7. Bootstrap
+  8. formik
+  9. axios
+  10. leo-profanity
 
-<h3>Installation:</h3>
-<ul>
-  <li>git clone git@github.com:YuliaMisc/frontend-project-12.git</li>
-  <li>make install</li>
-</ul>
+## Installation:
+```bash
+ git clone git@github.com:YuliaMisc/frontend-project-12.git
+ make install
+```
