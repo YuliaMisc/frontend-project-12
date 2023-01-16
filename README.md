@@ -2,7 +2,7 @@
 [![Actions Status](https://github.com/YuliaMisc/frontend-project-12/workflows/hexlet-check/badge.svg)](https://github.com/YuliaMisc/frontend-project-12/actions)
 
 <h1>Program description</h1>
-The [application](https://frontend-project-12-production-9d10.up.railway.app/) is a simple analogue of Slack chat.
+The [application]: https://frontend-project-12-production-9d10.up.railway.app/ is a simple analogue of Slack chat.
 
 <h2>Features:</h2>
 <ul>
