@@ -23,11 +23,13 @@ const ChatContainer = () => {
   const { addMessage } = useApi();
   const { getUserName } = useAuth();
   const currentUser = getUserName();
+  filter.add(filter.getDictionary('ru'));
 
   const { messages } = useSelector((store) => store.messagesReducer);
   const { currentChannelId, channels } = useSelector((state) => state.channelsReducer);
   const currentChanel = channels.find(({ id }) => currentChannelId === id);
   const filretMaeesnge = messages.filter(({ channelId }) => channelId === currentChannelId);
+  const nameChannel = currentChanel ? `# ${filter.clean(currentChanel.name)}` : '# general';
 
   const input = useRef(null);
   useEffect(() => input.current.focus(), []);
@@ -49,7 +51,7 @@ const ChatContainer = () => {
       <div className="d-flex flex-column h-100">
         <div className="bg-light mb-4 p-3 shadow-sm small">
           <p className="m-0">
-            <b>{currentChanel ? `# ${currentChanel.name}` : '# general'}</b>
+            <b>{nameChannel}</b>
           </p>
           <span className="text-muted">{`${filretMaeesnge.length} ${t('chat.messageCount', { count: filretMaeesnge.length })}`}</span>
         </div>

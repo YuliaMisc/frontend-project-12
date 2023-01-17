@@ -8,6 +8,7 @@ import { toast } from 'react-toastify';
 
 import signup from '../images/login.jpg';
 import { useAuth } from '../hooks/index.jsx';
+import routes from '../routes';
 
 const SignupPage = () => {
   const { t } = useTranslation();
@@ -41,7 +42,7 @@ const SignupPage = () => {
       setLoadingStatus(true);
       try {
         const data = { username, password };
-        await axios.post('/api/v1/signup', data);
+        await axios.post(routes.signupPath(), data);
         await logIn(data);
       } catch (err) {
         if (err.response?.status === 409) { // eslint-disable-line

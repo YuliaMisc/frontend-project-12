@@ -10,6 +10,7 @@ import { useAuth } from '../hooks/index.jsx';
 import ChannelsContainer from './ChannelsContainer.jsx';
 import ChatContainer from './ChatContainer.jsx';
 import ModalContainer from './Modal.jsx';
+import routes from '../routes.js';
 
 const ChatPage = () => {
   const { getAuthHeader } = useAuth();
@@ -19,7 +20,7 @@ const ChatPage = () => {
   useEffect(() => {
     try {
       const getData = async () => {
-        const { data } = await axios.get('/api/v1/data', { headers: getAuthHeader() });
+        const { data } = await axios.get(routes.dataPath(), { headers: getAuthHeader() });
         dispatch(channelsActions.setInitialСhannels(data));
         dispatch(messagesActions.setInitialMessages(data));
       };

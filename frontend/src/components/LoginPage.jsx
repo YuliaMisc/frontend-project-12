@@ -2,7 +2,7 @@ import React, { useState, useRef, useEffect } from 'react';
 import * as yup from 'yup';
 import { useFormik } from 'formik';
 import { useTranslation } from 'react-i18next';
-import { Button, Form } from 'react-bootstrap';
+import { Form } from 'react-bootstrap';
 
 import login from '../images/login.jpg';
 import { useAuth } from '../hooks/index.jsx';
@@ -81,7 +81,7 @@ const LoginPage = () => {
                   <Form.Label className="form-label" htmlFor="password">{t('login.password')}</Form.Label>
                   <Form.Control.Feedback type="invalid">{t('login.authFailed')}</Form.Control.Feedback>
                 </Form.Group>
-                <Button type="submit" disabled={loadingStatus} className="w-100 mb-3 btn btn-outline-primary">{t('login.submit')}</Button>
+                <button type="submit" disabled={loadingStatus} className="w-100 mb-3 btn btn-outline-primary">{t('login.submit')}</button>
               </Form>
             </div>
             <div className="card-footer p-4">

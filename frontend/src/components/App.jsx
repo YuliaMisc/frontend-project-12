@@ -15,6 +15,7 @@ import SignupPage from './SignupPage.jsx';
 import ChatPage from './ChatPade.jsx';
 import RequestAuth from '../hooks/RequestAuth.jsx';
 import Layout from './Layout.jsx';
+import routes from '../routes.js';
 
 const AuthProvider = ({ children }) => {
   const navigate = useNavigate();
@@ -22,7 +23,7 @@ const AuthProvider = ({ children }) => {
   const [username, setUserName] = useState(currentUser || '');
 
   const logIn = async (values) => {
-    const { data } = await axios.post('/api/v1/login', values);
+    const { data } = await axios.post(routes.loginPath(), values);
     localStorage.setItem('token', data.token);
     localStorage.setItem('username', data.username);
     navigate('/', { replace: true });
