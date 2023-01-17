@@ -71,7 +71,7 @@ const ChatContainer = () => {
             <div className="input-group has-validation">
               <input
                 name="body"
-                aria-label={t('channel.newMessage')}
+                aria-label={t('chat.newMessage')}
                 placeholder={t('chat.enterMessage')}
                 className="border-0 p-0 ps-2 form-control"
                 value={value}
