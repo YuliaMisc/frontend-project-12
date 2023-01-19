@@ -3,9 +3,11 @@ import * as yup from 'yup';
 import { useFormik } from 'formik';
 import { useTranslation } from 'react-i18next';
 import { Form } from 'react-bootstrap';
+import axios from 'axios';
 
 import login from '../images/login.jpg';
 import { useAuth } from '../hooks/index.jsx';
+import routes from '../routes.js';
 
 const LoginPage = () => {
   const { t } = useTranslation();
@@ -26,7 +28,8 @@ const LoginPage = () => {
       setAuthFailed(false);
       setLoadingStatus(true);
       try {
-        await logIn(values);
+        const { data } = await axios.post(routes.loginPath(), values);
+        await logIn(data);
       } catch (err) {
         setAuthFailed(true);
         setLoadingStatus(false);

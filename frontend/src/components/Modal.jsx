@@ -33,9 +33,11 @@ const AddChannelModal = () => {
       setLoadingStatus(true);
       try {
         if (!namesChannels.includes(name)) { // eslint-disable-line
-          const data = await addCannel(name);
-          dispatch(modalActions.closeModal());
-          dispatch(channelsActions.switchChannel(data.id));
+          await addCannel(name)
+            .then((channel) => {
+              dispatch(modalActions.closeModal());
+              dispatch(channelsActions.switchChannel(channel.id));
+            });
           toast.success(t('channel.created'));
         } else {
           throw Error('Channel already exists');

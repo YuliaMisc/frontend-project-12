@@ -21,8 +21,8 @@ const ChatContainer = () => {
   const [value, setValue] = useState('');
   const [loadingStatus, setLoadingStatus] = useState(false);
   const { addMessage } = useApi();
-  const { getUserName } = useAuth();
-  const currentUser = getUserName();
+  const { user } = useAuth();
+  const currentUser = user.username;
   filter.add(filter.getDictionary('ru'));
 
   const { messages } = useSelector((store) => store.messagesReducer);

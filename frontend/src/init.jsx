@@ -24,19 +24,13 @@ const init = async () => {
     socket.emit(evens, arg, (response) => (response.status === 'ok' ? resolve(response.data) : reject()));
   });
 
-  const addMessage = async (text, username, channelId) => {
-    await emittingEvents('newMessage', { text, username, channelId });
-  };
-  const addCannel = async (name) => {
-    const response = await emittingEvents('newChannel', { name });
-    return response;
-  };
-  const removeChannel = async (id) => {
-    await emittingEvents('removeChannel', { id });
-  };
-  const renameChannel = async (name, id) => {
-    await emittingEvents('renameChannel', { name, id });
-  };
+  const addMessage = (text, username, channelId) => emittingEvents('newMessage', { text, username, channelId });
+
+  const addCannel = (name) => emittingEvents('newChannel', { name });
+
+  const removeChannel = (id) => emittingEvents('removeChannel', { id });
+
+  const renameChannel = (name, id) => emittingEvents('renameChannel', { name, id });
 
   socket.on('newMessage', (payload) => {
     store.dispatch(messagesActions.addMessage(payload));
@@ -52,7 +46,7 @@ const init = async () => {
   });
 
   const rollbarConfig = {
-    accessToken: 'e830b591be1b4f71ba401a7706fd7341',
+    accessToken: process.env.REACT_APP_SECRET_CODE,
     captureUncaught: true,
     captureUnhandledRejections: true,
     payload: {
