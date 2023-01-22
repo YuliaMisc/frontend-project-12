@@ -1,11 +1,6 @@
 import React, { useState } from 'react';
 import '../index.css';
-import {
-  Routes,
-  Route,
-  useNavigate,
-  Navigate,
-} from 'react-router-dom';
+import { Routes, Route, Navigate } from 'react-router-dom';
 import { ToastContainer } from 'react-toastify';
 
 import AuthContext from '../hooks/AuthContextProvider.jsx';
@@ -17,26 +12,23 @@ import Layout from './Layout.jsx';
 import routes from '../routes.js';
 
 const AuthProvider = ({ children }) => {
-  const navigate = useNavigate();
-  const currentUsername = localStorage.getItem('username');
-  const currentToken = localStorage.getItem('token');
-  const [user, setUser] = useState({ username: currentUsername || '', token: currentToken || '' });
+  const currentUser = localStorage.getItem('user') ? JSON.parse(localStorage.getItem('user')) : {};
+  const [user, setUser] = useState(currentUser);
 
-  const logIn = async (data) => {
-    localStorage.setItem('token', data.token);
-    localStorage.setItem('username', data.username);
-    navigate(routes.chatPadePath(), { replace: true });
-    setUser({ username: localStorage.getItem('username'), token: localStorage.getItem('token') });
+  const logIn = (data) => {
+    localStorage.setItem('user', JSON.stringify(data));
+    setUser(data);
   };
 
   const logOut = () => {
-    localStorage.removeItem('token');
-    localStorage.removeItem('username');
-    setUser({ username: localStorage.getItem('username'), token: localStorage.getItem('token') });
-    navigate(routes.loginPadePath(), { replace: true });
+    localStorage.removeItem('user');
+    setUser({});
   };
 
-  const getAuthHeader = () => ({ Authorization: `Bearer ${localStorage.getItem('token')}` });
+  const getAuthHeader = () => {
+    const userId = JSON.parse(localStorage.getItem('user'));
+    return userId && userId.token ? ({ Authorization: `Bearer ${userId.token}` }) : {};
+  };
 
   return (
     <AuthContext.Provider value={{ // eslint-disable-line
@@ -49,7 +41,7 @@ const AuthProvider = ({ children }) => {
 };
 
 const RequestAuth = ({ children }) => {
-  const Component = localStorage.token ? children : <Navigate to={routes.loginPadePath()} />;
+  const Component = localStorage.user ? children : <Navigate to={routes.loginPadePath()} />;
   return Component;
 };
 

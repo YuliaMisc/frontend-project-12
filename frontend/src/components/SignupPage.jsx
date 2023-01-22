@@ -2,6 +2,7 @@ import React, { useState, useRef, useEffect } from 'react';
 import * as yup from 'yup';
 import { useFormik } from 'formik';
 import { useTranslation } from 'react-i18next';
+import { useNavigate } from 'react-router-dom';
 import { Form } from 'react-bootstrap';
 import axios from 'axios';
 import { toast } from 'react-toastify';
@@ -13,6 +14,7 @@ import routes from '../routes';
 const SignupPage = () => {
   const { t } = useTranslation();
   const { logIn } = useAuth();
+  const navigate = useNavigate();
   const [userAlreadyExists, setUsedAlreadyExists] = useState(false);
   const [loadingStatus, setLoadingStatus] = useState(false);
 
@@ -41,9 +43,9 @@ const SignupPage = () => {
       setUsedAlreadyExists(false);
       setLoadingStatus(true);
       try {
-        const data = { username, password };
-        await axios.post(routes.signupPath(), data);
-        await logIn(data);
+        const { data } = await axios.post(routes.signupPath(), { username, password });
+        logIn(data);
+        navigate(routes.chatPadePath(), { replace: true });
       } catch (err) {
         if (err.response?.status === 409) { // eslint-disable-line
           setLoadingStatus(false);
@@ -53,7 +55,6 @@ const SignupPage = () => {
 
         if (err.isAxiosError) { // eslint-disable-line
           toast.error(t('errors.network'));
-          throw err;
         } else {
           toast.error(t('erros.unknown'));
         }

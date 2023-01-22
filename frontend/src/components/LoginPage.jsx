@@ -2,8 +2,10 @@ import React, { useState, useRef, useEffect } from 'react';
 import * as yup from 'yup';
 import { useFormik } from 'formik';
 import { useTranslation } from 'react-i18next';
+import { useNavigate } from 'react-router-dom';
 import { Form } from 'react-bootstrap';
 import axios from 'axios';
+import { toast } from 'react-toastify';
 
 import login from '../images/login.jpg';
 import { useAuth } from '../hooks/index.jsx';
@@ -11,6 +13,7 @@ import routes from '../routes.js';
 
 const LoginPage = () => {
   const { t } = useTranslation();
+  const navigate = useNavigate();
   const [authFailed, setAuthFailed] = useState(false);
   const [loadingStatus, setLoadingStatus] = useState(false);
   const { logIn } = useAuth();
@@ -29,10 +32,20 @@ const LoginPage = () => {
       setLoadingStatus(true);
       try {
         const { data } = await axios.post(routes.loginPath(), values);
-        await logIn(data);
+        logIn(data);
+        navigate(routes.chatPadePath(), { replace: true });
       } catch (err) {
-        setAuthFailed(true);
-        setLoadingStatus(false);
+        if (err.response?.status === 409) { // eslint-disable-line
+          setLoadingStatus(false);
+          setAuthFailed(true);
+          return;
+        }
+
+        if (err.isAxiosError) { // eslint-disable-line
+          toast.error(t('errors.network'));
+        } else {
+          toast.error(t('erros.unknown'));
+        }
       }
     },
   });
