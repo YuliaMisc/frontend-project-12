@@ -15,7 +15,6 @@ const LoginPage = () => {
   const { t } = useTranslation();
   const navigate = useNavigate();
   const [authFailed, setAuthFailed] = useState(false);
-  const [loadingStatus, setLoadingStatus] = useState(false);
   const { logIn } = useAuth();
 
   const formik = useFormik({
@@ -27,16 +26,15 @@ const LoginPage = () => {
       username: yup.string().trim().required(),
       password: yup.string().required(),
     }),
-    onSubmit: async (values) => {
+    onSubmit: async (values, { setSubmitting }) => {
       setAuthFailed(false);
-      setLoadingStatus(true);
       try {
         const { data } = await axios.post(routes.loginPath(), values);
         logIn(data);
         navigate(routes.chatPadePath(), { replace: true });
       } catch (err) {
+        setSubmitting(false);
         if (err.response?.status === 409) { // eslint-disable-line
-          setLoadingStatus(false);
           setAuthFailed(true);
           return;
         }
@@ -52,6 +50,7 @@ const LoginPage = () => {
 
   const input = useRef(null);
   useEffect(() => input.current.focus(), []);
+  console.log(formik.isSubmitting);
 
   return (
     <div className="container-fluid h-100">
@@ -97,7 +96,7 @@ const LoginPage = () => {
                   <Form.Label className="form-label" htmlFor="password">{t('login.password')}</Form.Label>
                   <Form.Control.Feedback type="invalid">{t('login.authFailed')}</Form.Control.Feedback>
                 </Form.Group>
-                <button type="submit" disabled={loadingStatus} className="w-100 mb-3 btn btn-outline-primary">{t('login.submit')}</button>
+                <button type="submit" disabled={formik.isSubmitting} className="w-100 mb-3 btn btn-outline-primary">{t('login.submit')}</button>
               </Form>
             </div>
             <div className="card-footer p-4">

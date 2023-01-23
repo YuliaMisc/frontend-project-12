@@ -17,9 +17,7 @@ const AddChannelModal = () => {
   const { channels } = useSelector((state) => state.channelsReducer);
   const { show } = useSelector((state) => state.modalReducer);
   const namesChannels = channels.map(({ name }) => name);
-
   const [nameUniqueness, setNameUniqueness] = useState(false);
-  const [loadingStatus, setLoadingStatus] = useState(false);
 
   const handleClose = () => {
     dispatch(modalActions.closeModal());
@@ -29,8 +27,7 @@ const AddChannelModal = () => {
     initialValues: {
       name: '',
     },
-    onSubmit: async ({ name }) => {
-      setLoadingStatus(true);
+    onSubmit: async ({ name }, { setSubmitting }) => {
       try {
         if (!namesChannels.includes(name)) { // eslint-disable-line
           await addCannel(name)
@@ -44,7 +41,7 @@ const AddChannelModal = () => {
         }
       } catch (err) {
         setNameUniqueness(true);
-        setLoadingStatus(false);
+        setSubmitting(false);
       }
     },
   });
@@ -73,8 +70,8 @@ const AddChannelModal = () => {
             <Form.Label className="visually-hidden" htmlFor="name">{t('channel.nameChannel')}</Form.Label>
             <Form.Control.Feedback className="invalid-feedback">{t('channel.feedback')}</Form.Control.Feedback>
             <div className="d-flex justify-content-end">
-              <Button type="button" disabled={loadingStatus} className="me-2 btn btn-secondary" onClick={handleClose}>{t('channel.cancel')}</Button>
-              <Button type="submit" disabled={loadingStatus} className="btn btn-primary">{t('channel.send')}</Button>
+              <Button type="button" disabled={formik.isSubmitting} className="me-2 btn btn-secondary" onClick={handleClose}>{t('channel.cancel')}</Button>
+              <Button type="submit" disabled={formik.isSubmitting} className="btn btn-primary">{t('channel.send')}</Button>
             </div>
           </Form.Group>
         </Form>
@@ -91,9 +88,7 @@ const RenameCannel = () => {
   const { channels } = useSelector((state) => state.channelsReducer);
   const namesChannels = channels.map(({ name }) => name);
   const currentChannel = channels.find(({ id }) => id === channelId);
-
   const [nameUniqueness, setNameUniqueness] = useState(false);
-  const [loadingStatus, setLoadingStatus] = useState(false);
 
   const handleClose = () => {
     dispatch(modalActions.closeModal());
@@ -103,8 +98,7 @@ const RenameCannel = () => {
     initialValues: {
       name: currentChannel.name,
     },
-    onSubmit: async ({ name }) => {
-      setLoadingStatus(true);
+    onSubmit: async ({ name }, { setSubmitting }) => {
       try {
         if (!namesChannels.includes(name)) { // eslint-disable-line
           await renameChannel(name, channelId);
@@ -115,7 +109,7 @@ const RenameCannel = () => {
         }
       } catch (err) {
         setNameUniqueness(true);
-        setLoadingStatus(false);
+        setSubmitting(false);
       }
     },
   });
@@ -145,8 +139,8 @@ const RenameCannel = () => {
             <Form.Label className="visually-hidden" htmlFor="name">{t('channel.nameChannel')}</Form.Label>
             <Form.Control.Feedback className="invalid-feedback">{t('channel.feedback')}</Form.Control.Feedback>
             <div className="d-flex justify-content-end">
-              <Button type="button" disabled={loadingStatus} className="me-2 btn btn-secondary" onClick={handleClose}>{t('channel.cancel')}</Button>
-              <Button type="submit" disabled={loadingStatus} className="btn btn-primary">{t('channel.send')}</Button>
+              <Button type="button" disabled={formik.isSubmitting} className="me-2 btn btn-secondary" onClick={handleClose}>{t('channel.cancel')}</Button>
+              <Button type="submit" disabled={formik.isSubmitting} className="btn btn-primary">{t('channel.send')}</Button>
             </div>
           </Form.Group>
         </Form>

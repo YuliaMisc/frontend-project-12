@@ -16,7 +16,6 @@ const SignupPage = () => {
   const { logIn } = useAuth();
   const navigate = useNavigate();
   const [userAlreadyExists, setUsedAlreadyExists] = useState(false);
-  const [loadingStatus, setLoadingStatus] = useState(false);
 
   const formik = useFormik({
     initialValues: {
@@ -39,16 +38,16 @@ const SignupPage = () => {
         .string()
         .oneOf([yup.ref('password'), null], t('signup.confirmPasswordConstraints')),
     }),
-    onSubmit: async ({ username, password }) => {
+    onSubmit: async ({ username, password }, { setSubmitting }) => {
       setUsedAlreadyExists(false);
-      setLoadingStatus(true);
       try {
         const { data } = await axios.post(routes.signupPath(), { username, password });
         logIn(data);
         navigate(routes.chatPadePath(), { replace: true });
       } catch (err) {
+        setSubmitting(false);
+
         if (err.response?.status === 409) { // eslint-disable-line
-          setLoadingStatus(false);
           setUsedAlreadyExists(true);
           return;
         }
@@ -132,7 +131,7 @@ const SignupPage = () => {
                 <Form.Control.Feedback type="invalid" className="invalid-tooltip">{formik.errors.confirmPassword || (userAlreadyExists && t('signup.alreadyExists'))}</Form.Control.Feedback>
                 <Form.Label className="form-label" htmlFor="confirmPassword">{t('signup.confirmPassword')}</Form.Label>
               </Form.Group>
-              <button type="submit" disabled={loadingStatus} className="w-100 btn btn-outline-primary">{t('signup.register')}</button>
+              <button type="submit" disabled={formik.isSubmitting} className="w-100 btn btn-outline-primary">{t('signup.register')}</button>
             </Form>
           </div>
         </div>
