@@ -26,15 +26,14 @@ const LoginPage = () => {
       username: yup.string().trim().required(),
       password: yup.string().required(),
     }),
-    onSubmit: async (values, { setSubmitting }) => {
+    onSubmit: async (values) => {
       setAuthFailed(false);
       try {
         const { data } = await axios.post(routes.loginPath(), values);
         logIn(data);
         navigate(routes.chatPadePath(), { replace: true });
       } catch (err) {
-        setSubmitting(false);
-        if (err.response?.status === 409) { // eslint-disable-line
+        if (err.response?.status === 401) { // eslint-disable-line
           setAuthFailed(true);
           return;
         }
@@ -50,7 +49,6 @@ const LoginPage = () => {
 
   const input = useRef(null);
   useEffect(() => input.current.focus(), []);
-  console.log(formik.isSubmitting);
 
   return (
     <div className="container-fluid h-100">

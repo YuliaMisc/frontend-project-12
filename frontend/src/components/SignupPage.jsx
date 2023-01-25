@@ -38,15 +38,13 @@ const SignupPage = () => {
         .string()
         .oneOf([yup.ref('password'), null], t('signup.confirmPasswordConstraints')),
     }),
-    onSubmit: async ({ username, password }, { setSubmitting }) => {
+    onSubmit: async ({ username, password }) => {
       setUsedAlreadyExists(false);
       try {
         const { data } = await axios.post(routes.signupPath(), { username, password });
         logIn(data);
         navigate(routes.chatPadePath(), { replace: true });
       } catch (err) {
-        setSubmitting(false);
-
         if (err.response?.status === 409) { // eslint-disable-line
           setUsedAlreadyExists(true);
           return;

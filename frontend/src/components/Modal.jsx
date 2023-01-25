@@ -5,10 +5,10 @@ import { Button, Form } from 'react-bootstrap';
 import { useFormik } from 'formik';
 import Modal from 'react-bootstrap/Modal';
 import { toast } from 'react-toastify';
+import * as yup from 'yup';
 
 import { useApi } from '../hooks/index.jsx';
 import { actions as modalActions } from '../slices/modalSlice.js';
-import { actions as channelsActions } from '../slices/channelsSlice.js';
 
 const AddChannelModal = () => {
   const { t } = useTranslation();
@@ -17,7 +17,6 @@ const AddChannelModal = () => {
   const { channels } = useSelector((state) => state.channelsReducer);
   const { show } = useSelector((state) => state.modalReducer);
   const namesChannels = channels.map(({ name }) => name);
-  const [nameUniqueness, setNameUniqueness] = useState(false);
 
   const handleClose = () => {
     dispatch(modalActions.closeModal());
@@ -27,21 +26,20 @@ const AddChannelModal = () => {
     initialValues: {
       name: '',
     },
-    onSubmit: async ({ name }, { setSubmitting }) => {
+    validationSchema: yup.object({
+      name: yup.string().notOneOf(namesChannels, t('channel.feedback')),
+    }),
+    onSubmit: async ({ name }) => {
       try {
-        if (!namesChannels.includes(name)) { // eslint-disable-line
-          await addCannel(name)
-            .then((channel) => {
-              dispatch(modalActions.closeModal());
-              dispatch(channelsActions.switchChannel(channel.id));
-            });
-          toast.success(t('channel.created'));
+        await addCannel(name);
+        dispatch(modalActions.closeModal());
+        toast.success(t('channel.created'));
+      } catch {
+        if (err.isAxiosError) { // eslint-disable-line
+          toast.error(t('errors.network'));
         } else {
-          throw Error('Channel already exists');
+          toast.error(t('erros.unknown'));
         }
-      } catch (err) {
-        setNameUniqueness(true);
-        setSubmitting(false);
       }
     },
   });
@@ -65,10 +63,10 @@ const AddChannelModal = () => {
               value={formik.values.name}
               onChange={formik.handleChange}
               ref={input}
-              isInvalid={nameUniqueness}
+              isInvalid={formik.errors.name}
             />
             <Form.Label className="visually-hidden" htmlFor="name">{t('channel.nameChannel')}</Form.Label>
-            <Form.Control.Feedback className="invalid-feedback">{t('channel.feedback')}</Form.Control.Feedback>
+            <Form.Control.Feedback type="invalid">{formik.errors.name}</Form.Control.Feedback>
             <div className="d-flex justify-content-end">
               <Button type="button" disabled={formik.isSubmitting} className="me-2 btn btn-secondary" onClick={handleClose}>{t('channel.cancel')}</Button>
               <Button type="submit" disabled={formik.isSubmitting} className="btn btn-primary">{t('channel.send')}</Button>
@@ -88,7 +86,6 @@ const RenameCannel = () => {
   const { channels } = useSelector((state) => state.channelsReducer);
   const namesChannels = channels.map(({ name }) => name);
   const currentChannel = channels.find(({ id }) => id === channelId);
-  const [nameUniqueness, setNameUniqueness] = useState(false);
 
   const handleClose = () => {
     dispatch(modalActions.closeModal());
@@ -98,18 +95,20 @@ const RenameCannel = () => {
     initialValues: {
       name: currentChannel.name,
     },
-    onSubmit: async ({ name }, { setSubmitting }) => {
+    validationSchema: yup.object({
+      name: yup.string().notOneOf(namesChannels, t('channel.feedback')),
+    }),
+    onSubmit: async ({ name }) => {
       try {
-        if (!namesChannels.includes(name)) { // eslint-disable-line
-          await renameChannel(name, channelId);
-          dispatch(modalActions.closeModal());
-          toast.success(t('channel.renamed'));
+        await renameChannel(name, channelId);
+        dispatch(modalActions.closeModal());
+        toast.success(t('channel.renamed'));
+      } catch {
+        if (err.isAxiosError) { // eslint-disable-line
+          toast.error(t('errors.network'));
         } else {
-          throw Error('Channel already exists');
+          toast.error(t('erros.unknown'));
         }
-      } catch (err) {
-        setNameUniqueness(true);
-        setSubmitting(false);
       }
     },
   });
@@ -134,10 +133,10 @@ const RenameCannel = () => {
               value={formik.values.name}
               onChange={formik.handleChange}
               ref={input}
-              isInvalid={nameUniqueness}
+              isInvalid={formik.errors.name}
             />
             <Form.Label className="visually-hidden" htmlFor="name">{t('channel.nameChannel')}</Form.Label>
-            <Form.Control.Feedback className="invalid-feedback">{t('channel.feedback')}</Form.Control.Feedback>
+            <Form.Control.Feedback type="invalid">{formik.errors.name}</Form.Control.Feedback>
             <div className="d-flex justify-content-end">
               <Button type="button" disabled={formik.isSubmitting} className="me-2 btn btn-secondary" onClick={handleClose}>{t('channel.cancel')}</Button>
               <Button type="submit" disabled={formik.isSubmitting} className="btn btn-primary">{t('channel.send')}</Button>
@@ -163,7 +162,6 @@ const RemoveChannel = () => {
   const handleRemove = async () => {
     await removeChannel(channelId);
     dispatch(modalActions.closeModal());
-    dispatch(channelsActions.switchChannel(1));
     setLoadingStatus(true);
     toast.success(t('channel.removed'));
   };

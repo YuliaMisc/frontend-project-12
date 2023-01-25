@@ -4,6 +4,7 @@ import { Routes, Route, Navigate } from 'react-router-dom';
 import { ToastContainer } from 'react-toastify';
 
 import AuthContext from '../hooks/AuthContextProvider.jsx';
+import { useAuth } from '../hooks/index.jsx';
 import LoginPage from './LoginPage.jsx';
 import ErrorPage from './ErrorPage.jsx';
 import SignupPage from './SignupPage.jsx';
@@ -41,7 +42,8 @@ const AuthProvider = ({ children }) => {
 };
 
 const RequestAuth = ({ children }) => {
-  const Component = localStorage.user ? children : <Navigate to={routes.loginPadePath()} />;
+  const { user } = useAuth();
+  const Component = user ? children : <Navigate to={routes.loginPadePath()} />;
   return Component;
 };
 
