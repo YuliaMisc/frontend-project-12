@@ -1,8 +1,12 @@
 ### Hexlet tests and linter status:
 [![Actions Status](https://github.com/YuliaMisc/frontend-project-12/workflows/hexlet-check/badge.svg)](https://github.com/YuliaMisc/frontend-project-12/actions)
 
+<a href="https://codeclimate.com/github/YuliaMisc/frontend-project-12/maintainability"><img src="https://api.codeclimate.com/v1/badges/cb48d31c2c22ffc7a45e/maintainability" /></a>
+
+![[example workflow]](https://github.com/YuliaMisc/frontend-project-12/actions/workflows/nodejs.yml/badge.svg)
+
 # Program description
-[The application](https://frontend-project-12-production-9d10.up.railway.app/login) is a simple analogue of Slack chat.
+[The application](https://chat-zh2w.onrender.com) is a simple analogue of Slack chat.
 
 ## Features:
   - Registration and login.

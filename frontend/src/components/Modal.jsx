@@ -29,6 +29,7 @@ const AddChannelModal = () => {
     validationSchema: yup.object({
       name: yup.string().notOneOf(namesChannels, t('channel.feedback')),
     }),
+    validateOnChange: false,
     onSubmit: async ({ name }) => {
       try {
         await addCannel(name);
@@ -98,6 +99,7 @@ const RenameCannel = () => {
     validationSchema: yup.object({
       name: yup.string().notOneOf(namesChannels, t('channel.feedback')),
     }),
+    validateOnChange: false,
     onSubmit: async ({ name }) => {
       try {
         await renameChannel(name, channelId);
