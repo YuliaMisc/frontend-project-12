@@ -29,11 +29,10 @@ const ChatPage = () => {
         if (err.response?.status === 401) { // eslint-disable-line
           logOut();
           navigate(routes.loginPadePath(), { replace: true });
-        }
-        if (err.isAxiosError) { // eslint-disable-line
+        } else if (err.isAxiosError) { // eslint-disable-line
           toast.error(t('errors.network'));
         } else {
-          toast.error(t('erros.unknown'));
+          toast.error(t('errors.unknown'));
         }
       });
   });

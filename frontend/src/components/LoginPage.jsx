@@ -41,7 +41,7 @@ const LoginPage = () => {
         if (err.isAxiosError) { // eslint-disable-line
           toast.error(t('errors.network'));
         } else {
-          toast.error(t('erros.unknown'));
+          toast.error(t('errors.unknown'));
         }
       }
     },
