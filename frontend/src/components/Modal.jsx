@@ -27,7 +27,7 @@ const AddChannelModal = () => {
       name: '',
     },
     validationSchema: yup.object({
-      name: yup.string().notOneOf(namesChannels, t('channel.feedback')),
+      name: yup.string().required(t('channel.requiredField')).notOneOf(namesChannels, t('channel.feedback')),
     }),
     validateOnChange: false,
     onSubmit: async ({ name }) => {
@@ -97,7 +97,7 @@ const RenameCannel = () => {
       name: currentChannel.name,
     },
     validationSchema: yup.object({
-      name: yup.string().notOneOf(namesChannels, t('channel.feedback')),
+      name: yup.string().required(t('channel.requiredField')).notOneOf(namesChannels, t('channel.feedback')),
     }),
     validateOnChange: false,
     onSubmit: async ({ name }) => {

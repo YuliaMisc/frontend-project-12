@@ -2,7 +2,7 @@ import React, { useState, useRef, useEffect } from 'react';
 import * as yup from 'yup';
 import { useFormik } from 'formik';
 import { useTranslation } from 'react-i18next';
-import { useNavigate } from 'react-router-dom';
+import { useNavigate, Link } from 'react-router-dom';
 import { Form } from 'react-bootstrap';
 import axios from 'axios';
 import { toast } from 'react-toastify';
@@ -100,7 +100,7 @@ const LoginPage = () => {
             <div className="card-footer p-4">
               <div className="text-center">
                 <span>{t('login.newToChat')}</span>
-                <a href="/signup">{t('login.signup')}</a>
+                <Link to={routes.signupPadePath()}>{t('login.signup')}</Link>
               </div>
             </div>
           </div>

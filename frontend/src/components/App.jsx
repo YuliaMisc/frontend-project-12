@@ -13,7 +13,7 @@ import Layout from './Layout.jsx';
 import routes from '../routes.js';
 
 const AuthProvider = ({ children }) => {
-  const currentUser = localStorage.getItem('user') ? JSON.parse(localStorage.getItem('user')) : {};
+  const currentUser = JSON.parse(localStorage.getItem('user'));
   const [user, setUser] = useState(currentUser);
 
   const logIn = (data) => {

@@ -43,6 +43,7 @@ export default {
         created: 'Канал создан',
         renamed: 'Канал переименован',
         removed: 'Канал удалён',
+        requiredField: 'Обязательное поле',
       },
       signup: {
         header: 'Регистрация',
