@@ -8,28 +8,23 @@ import * as yup from 'yup';
 import { Form } from 'react-bootstrap';
 import { useApi, useAuth } from '../hooks/index.jsx';
 
-const Messages = ({ author, text }) => {
-  filter.add(filter.getDictionary('ru'));
-  const message = filter.clean(text);
-  return (
-    <div className="text-break mb-2">
-      <b>{author}</b>
-      {`: ${message}`}
-    </div>
-  );
-};
+const Messages = ({ author, message }) => (
+  <div className="text-break mb-2">
+    <b>{author}</b>
+    {`: ${message}`}
+  </div>
+);
 
 const ChatContainer = () => {
   const { t } = useTranslation();
   const { addMessage } = useApi();
   const { user } = useAuth();
   const currentUser = user.username;
-  filter.add(filter.getDictionary('ru'));
 
   const { messages } = useSelector((store) => store.messagesReducer);
   const { currentChannelId, channels } = useSelector((state) => state.channelsReducer);
   const currentChanel = channels.find(({ id }) => currentChannelId === id);
-  const filretMaeesnge = messages.filter(({ channelId }) => channelId === currentChannelId);
+  const filteredMaeesnge = messages.filter(({ channelId }) => channelId === currentChannelId);
   const nameChannel = currentChanel ? `# ${filter.clean(currentChanel.name)}` : '# general';
 
   const input = useRef(null);
@@ -44,7 +39,7 @@ const ChatContainer = () => {
     }),
     onSubmit: async ({ body }) => {
       try {
-        await addMessage(body, currentUser, currentChannelId);
+        await addMessage(filter.clean(body), currentUser, currentChannelId);
         formik.values.body = '';
       } catch {
         if (err.isAxiosError) { // eslint-disable-line
@@ -63,19 +58,20 @@ const ChatContainer = () => {
           <p className="m-0">
             <b>{nameChannel}</b>
           </p>
-          <span className="text-muted">{`${filretMaeesnge.length} ${t('chat.messageCount', { count: filretMaeesnge.length })}`}</span>
+          <span className="text-muted">{`${filteredMaeesnge.length} ${t('chat.messageCount', { count: filteredMaeesnge.length })}`}</span>
         </div>
-        <div id="messages-box" className="chat-messages overflow-auto px-5" />
-        {filretMaeesnge.map(({
-          text, username, channelId, id,
-        }) => (
-          <Messages
-            key={id}
-            text={text}
-            author={username}
-            channelId={channelId}
-          />
-        ))}
+        <div id="messages-box" className="chat-messages overflow-auto px-5">
+          {filteredMaeesnge.map(({
+            text, username, channelId, id,
+          }) => (
+            <Messages
+              key={id}
+              message={text}
+              author={username}
+              channelId={channelId}
+            />
+          ))}
+        </div>
         <div className="mt-auto px-5 py-3">
           <Form noValidate="" className="py-1 border rounded-2" onSubmit={formik.handleSubmit}>
             <Form.Group className="input-group has-validation">

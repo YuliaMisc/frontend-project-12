@@ -13,7 +13,7 @@ import ChatContainer from './ChatContainer.jsx';
 import ModalContainer from './Modal.jsx';
 import routes from '../routes.js';
 
-const ChatPage = () => {
+const MainPage = () => {
   const { getAuthHeader, logOut } = useAuth();
   const dispatch = useDispatch();
   const { t } = useTranslation();
@@ -48,4 +48,4 @@ const ChatPage = () => {
   );
 };
 
-export default ChatPage;
+export default MainPage;

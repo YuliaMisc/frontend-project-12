@@ -7,13 +7,12 @@ import { actions as channelsActions } from '../slices/channelsSlice.js';
 import { actions as modalActions } from '../slices/modalSlice.js';
 
 const Channels = ({
-  value, id, isCurrent, removable,
+  name, id, isCurrent, removable,
 }) => {
-  filter.add(filter.getDictionary('ru'));
   const dispatch = useDispatch();
   const { t } = useTranslation();
   const classButtons = cn('w-100', 'rounded-0', 'text-start', 'text-truncate', 'btn', { 'btn-secondary': isCurrent });
-  const nameChanel = filter.clean(value);
+  const nameChanel = filter.clean(name);
 
   const handleClick = (channelId) => () => {
     dispatch(channelsActions.switchChannel(channelId));
@@ -56,7 +55,7 @@ const ChannelsContainer = () => {
   const { channels, currentChannelId } = useSelector((state) => state.channelsReducer);
 
   const handleClickAdd = () => {
-    dispatch(modalActions.openModal({ modalType: 'addCannel' }));
+    dispatch(modalActions.openModal({ modalType: 'addChannel' }));
   };
 
   return (
@@ -75,7 +74,7 @@ const ChannelsContainer = () => {
         {channels.map(({ name, id, removable }) => (
           <Channels
             key={id}
-            value={name}
+            name={name}
             id={id}
             isCurrent={(currentChannelId === id)}
             removable={removable}

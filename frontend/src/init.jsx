@@ -7,8 +7,8 @@ import 'bootstrap/js/dist/dropdown';
 import 'bootstrap/js/dist/modal';
 import { BrowserRouter } from 'react-router-dom';
 import { Provider } from 'react-redux';
-import { io } from 'socket.io-client';
 import { Provider as RollbarProvide, ErrorBoundary } from '@rollbar/react';
+import filter from 'leo-profanity';
 
 import App from './components/App';
 import resources from './locales/index.js';
@@ -17,8 +17,8 @@ import { actions as messagesActions } from './slices/messagesSlice.js';
 import { actions as channelsActions } from './slices/channelsSlice.js';
 import ApiContext from './hooks/ApiContextProvider.jsx';
 
-const init = async () => {
-  const socket = io();
+const init = async (socket) => {
+  filter.add(filter.getDictionary('ru'));
 
   const emittingEvents = (evens, arg) => new Promise((resolve, reject) => {
     socket.emit(evens, arg, (response) => (response.status === 'ok' ? resolve(response.data) : reject()));
@@ -26,7 +26,7 @@ const init = async () => {
 
   const addMessage = (text, username, channelId) => emittingEvents('newMessage', { text, username, channelId });
 
-  const addCannel = (name) => emittingEvents('newChannel', { name });
+  const addChannel = (name) => emittingEvents('newChannel', { name });
 
   const removeChannel = (id) => emittingEvents('removeChannel', { id });
 
@@ -66,7 +66,7 @@ const init = async () => {
 
   const api = {
     addMessage,
-    addCannel,
+    addChannel,
     removeChannel,
     renameChannel,
   };

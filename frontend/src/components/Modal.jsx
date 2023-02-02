@@ -9,11 +9,12 @@ import * as yup from 'yup';
 
 import { useApi } from '../hooks/index.jsx';
 import { actions as modalActions } from '../slices/modalSlice.js';
+import { actions as channelsActions } from '../slices/channelsSlice.js';
 
 const AddChannelModal = () => {
   const { t } = useTranslation();
   const dispatch = useDispatch();
-  const { addCannel } = useApi();
+  const { addChannel } = useApi();
   const { channels } = useSelector((state) => state.channelsReducer);
   const { show } = useSelector((state) => state.modalReducer);
   const namesChannels = channels.map(({ name }) => name);
@@ -32,7 +33,8 @@ const AddChannelModal = () => {
     validateOnChange: false,
     onSubmit: async ({ name }) => {
       try {
-        await addCannel(name);
+        const { id } = await addChannel(name);
+        dispatch(channelsActions.switchChannel(id));
         dispatch(modalActions.closeModal());
         toast.success(t('channel.created'));
       } catch {
@@ -186,7 +188,7 @@ const RemoveChannel = () => {
 };
 
 const listModal = {
-  addCannel: AddChannelModal,
+  addChannel: AddChannelModal,
   removeCannel: RemoveChannel,
   renameCannel: RenameCannel,
 };

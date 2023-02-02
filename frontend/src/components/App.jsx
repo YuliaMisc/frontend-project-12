@@ -8,7 +8,7 @@ import { useAuth } from '../hooks/index.jsx';
 import LoginPage from './LoginPage.jsx';
 import ErrorPage from './ErrorPage.jsx';
 import SignupPage from './SignupPage.jsx';
-import ChatPage from './ChatPade.jsx';
+import MainPage from './MainPade.jsx';
 import Layout from './Layout.jsx';
 import routes from '../routes.js';
 
@@ -54,7 +54,7 @@ const App = () => (
         <div className="d-flex flex-column h-100">
           <Layout />
           <Routes>
-            <Route index element={(<RequestAuth><ChatPage /></RequestAuth>)} />
+            <Route index element={(<RequestAuth><MainPage /></RequestAuth>)} />
             <Route path={routes.signupPadePath()} element={<SignupPage />} />
             <Route path={routes.loginPadePath()} element={<LoginPage />} />
             <Route path={routes.errorPagePath()} element={<ErrorPage />} />
